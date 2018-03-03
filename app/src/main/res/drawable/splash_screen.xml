@@ -11,7 +11,7 @@ https://plus.google.com/+AndroidDevelopers/posts/Z1Wwainpjhd
     <item>
 
         <bitmap
-            android:src="@drawable/cupcake"
+            android:src="@mipmap/cupcake"
             android:gravity="center"/>
 
     </item>
