@@ -18,6 +18,7 @@ android {
     }
     lintOptions { disable 'GoogleAppIndexingWarning' }
     dataBinding.enabled = true
+    //android.databinding.enableV2=true // from 3.1.0 Canary 6 for better log error
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
