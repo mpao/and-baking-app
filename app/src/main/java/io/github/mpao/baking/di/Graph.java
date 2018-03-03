@@ -12,7 +12,8 @@ import io.github.mpao.baking.viewmodels.ListViewModel;
 @Component(modules = {
         ContextModule.class,
         RetrofitModule.class,
-        RepositoryModule.class
+        RepositoryModule.class,
+        DatabaseModule.class
 })
 
 public interface Graph {
