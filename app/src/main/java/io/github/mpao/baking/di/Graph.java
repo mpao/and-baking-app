@@ -2,7 +2,8 @@ package io.github.mpao.baking.di;
 
 import javax.inject.Singleton;
 import dagger.Component;
-import io.github.mpao.baking.ui.ListFragment;
+import io.github.mpao.baking.models.repositories.RecipeDataImpl;
+import io.github.mpao.baking.viewmodels.ListViewModel;
 
 /**
  * Dagger graph
@@ -10,11 +11,13 @@ import io.github.mpao.baking.ui.ListFragment;
 @Singleton
 @Component(modules = {
         ContextModule.class,
-        RetrofitModule.class
+        RetrofitModule.class,
+        RepositoryModule.class
 })
 
 public interface Graph {
 
-    void inject(ListFragment listFragment);
+    void inject(RecipeDataImpl recipeData);
+    void inject(ListViewModel listViewModel);
 
 }
