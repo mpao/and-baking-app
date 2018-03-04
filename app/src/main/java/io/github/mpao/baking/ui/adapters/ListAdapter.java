@@ -7,14 +7,17 @@ import android.view.ViewGroup;
 import java.util.List;
 import io.github.mpao.baking.databinding.ListRowBinding;
 import io.github.mpao.baking.entities.Recipe;
+import io.github.mpao.baking.ui.FragmentConnector;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
 
     private final List<Recipe> list;
+    private FragmentConnector connector;
 
-    public ListAdapter(List<Recipe> list){
+    public ListAdapter(List<Recipe> list, FragmentConnector connector){
 
         this.list = list;
+        this.connector = connector;
 
     }
 
@@ -57,6 +60,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
 
         public void bind(final Recipe recipe){
             bind.setRecipe( recipe );
+            bind.row.setOnClickListener( view -> connector.onElementSelected(recipe) );
             bind.executePendingBindings();
         }
 

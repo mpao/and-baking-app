@@ -48,7 +48,7 @@ public class ListFragment extends Fragment {
     private void observeData(ListViewModel viewModel){
 
         viewModel.getData().observe(this, list ->{
-            ListAdapter adapter = new ListAdapter( list );
+            ListAdapter adapter = new ListAdapter( list, (FragmentConnector) getActivity() );
             binding.list.setAdapter(adapter);
         });
 
