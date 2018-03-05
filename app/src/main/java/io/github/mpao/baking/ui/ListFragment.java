@@ -45,6 +45,18 @@ public class ListFragment extends Fragment {
 
     }
 
+    /*
+     * retain this fragment when activity is re-initialized
+     * otherwise binding and viewmodel field shall be null
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
+    }
+
     private void observeData(ListViewModel viewModel){
 
         viewModel.getData().observe(this, list ->{
