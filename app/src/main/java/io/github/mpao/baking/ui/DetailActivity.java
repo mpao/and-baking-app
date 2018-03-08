@@ -34,7 +34,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onResume();
 
         @Nullable Recipe recipe = this.getIntent().getParcelableExtra("element");
-        if(findViewById(R.id.detail_w720_marker) != null) {
+        if(findViewById(R.id.detail_w960_marker) != null) {
             Intent intent = new Intent( this, MainActivity.class );
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             intent.putExtra("element", recipe);
