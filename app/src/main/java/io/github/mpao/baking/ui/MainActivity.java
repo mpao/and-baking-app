@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.databinding.ActivityMainBinding;
-import io.github.mpao.baking.ui.adapters.ListAdapter;
+import io.github.mpao.baking.ui.adapters.RecipesAdapter;
 import io.github.mpao.baking.viewmodels.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private void observeData(MainViewModel viewModel){
 
         viewModel.getData().observe(this, list ->{
-            ListAdapter adapter = new ListAdapter( list );
+            RecipesAdapter adapter = new RecipesAdapter( list );
             binding.list.setAdapter(adapter);
         });
 

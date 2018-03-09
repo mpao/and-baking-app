@@ -8,14 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import io.github.mpao.baking.R;
 
-public class DetailFragment extends Fragment {
-
-    public DetailFragment() {}
+public class StepFragment extends Fragment{
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_detail, container, false);
+        return inflater.inflate(R.layout.fragment_step, container, false);
 
     }
 

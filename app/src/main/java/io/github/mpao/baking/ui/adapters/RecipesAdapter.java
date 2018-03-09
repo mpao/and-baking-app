@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import java.util.List;
 import io.github.mpao.baking.databinding.ListRowBinding;
 import io.github.mpao.baking.entities.Recipe;
-import io.github.mpao.baking.ui.DetailActivity;
+import io.github.mpao.baking.ui.RecipeActivity;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
+public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder>{
 
     private final List<Recipe> list;
     private Context context;
 
-    public ListAdapter(List<Recipe> list){
+    public RecipesAdapter(List<Recipe> list){
 
         this.list = list;
 
@@ -24,7 +24,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
 
     @Override
     @NonNull
-    public ListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from( context );
@@ -34,7 +34,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecipesAdapter.ViewHolder holder, int position) {
 
         Recipe recipe = list.get(position);
         holder.bind( recipe );
@@ -63,7 +63,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
         public void bind(final Recipe recipe){
             bind.setRecipe( recipe );
             bind.row.setOnClickListener( view -> {
-                Intent intent = new Intent(context, DetailActivity.class);
+                Intent intent = new Intent(context, RecipeActivity.class);
                 intent.putExtra("value", recipe);
                 context.startActivity(intent);
             } );
