@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 import io.github.mpao.baking.di.App;
 import io.github.mpao.baking.entities.Recipe;
+import io.github.mpao.baking.models.database.AppDatabase;
 import io.github.mpao.baking.models.network.Api;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,6 +21,7 @@ import retrofit2.Response;
 public class RecipeDataImpl implements RecipeData {
 
     @Inject Api api;
+    @Inject AppDatabase database;
     final private MutableLiveData<List<Recipe>> data = new MutableLiveData<>();
 
     public RecipeDataImpl(){
@@ -36,7 +38,8 @@ public class RecipeDataImpl implements RecipeData {
             @Override
             public void onResponse(@NonNull Call<Recipe[]> call, @NonNull Response<Recipe[]> response) {
 
-                data.setValue( Arrays.asList( response.body() ) );
+                database.recipeDao().insertAll( response.body() );
+                //data.setValue( Arrays.asList( response.body() ) );
 
             }
 
@@ -46,7 +49,7 @@ public class RecipeDataImpl implements RecipeData {
             }
         });
 
-        return data;
+        return database.recipeDao().getAll();
 
     }
 
