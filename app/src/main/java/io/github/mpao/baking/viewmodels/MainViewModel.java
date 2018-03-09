@@ -9,9 +9,9 @@ import io.github.mpao.baking.entities.Recipe;
 import io.github.mpao.baking.models.repositories.RecipeData;
 
 /**
- * Manage the data for the ListFragment
+ * Manage the data for the MainActivity
  */
-public class ListViewModel extends ViewModel {
+public class MainViewModel extends ViewModel {
 
     private LiveData<List<Recipe>> data;
     @Inject RecipeData repo;
