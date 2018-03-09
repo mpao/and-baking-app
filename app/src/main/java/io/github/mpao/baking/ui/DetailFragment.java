@@ -10,9 +10,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.azoft.carousellayoutmanager.CenterScrollListener;
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.databinding.FragmentDetailBinding;
 import io.github.mpao.baking.entities.Recipe;
+import io.github.mpao.baking.ui.adapters.StepAdapter;
 
 /*
  * Fragment rappresenting the detail of a list's object.
@@ -21,6 +25,7 @@ public class DetailFragment extends Fragment {
 
     private FragmentDetailBinding binding;
     private Activity activity;
+    CarouselLayoutManager layoutManager;
     @Nullable Recipe recipe;
 
     @Override
@@ -85,6 +90,15 @@ public class DetailFragment extends Fragment {
     protected void setUpDetailElement(Recipe recipe){
         this.recipe = recipe; // see onDetach
         binding.setRecipe(recipe);
+
+        layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false);
+        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+        StepAdapter adapter = new StepAdapter( recipe.getSteps() );
+        binding.steps.setLayoutManager(layoutManager);
+        binding.steps.setHasFixedSize(true);
+        binding.steps.setAdapter(adapter);
+        binding.steps.addOnScrollListener(new CenterScrollListener());
+
         binding.executePendingBindings();
     }
 

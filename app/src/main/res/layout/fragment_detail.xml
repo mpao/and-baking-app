@@ -35,6 +35,19 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/obj_id"
             app:layout_constraintStart_toEndOf="@+id/obj_id"/>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/steps"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            tools:listitem="@layout/step_row"
+            android:orientation="horizontal"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+
     </android.support.constraint.ConstraintLayout>
 
 </layout>
