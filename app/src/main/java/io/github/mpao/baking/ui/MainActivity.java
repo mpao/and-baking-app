@@ -4,13 +4,18 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.azoft.carousellayoutmanager.CenterScrollListener;
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.databinding.ActivityMainBinding;
 import io.github.mpao.baking.ui.adapters.RecipesAdapter;
 import io.github.mpao.baking.viewmodels.MainViewModel;
 
+/*
+ * Proof of concept of CarouselLayoutManager. It's very nice, but
+ * not for this use case.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
@@ -30,9 +35,11 @@ public class MainActivity extends AppCompatActivity {
         this.observeData(viewModel);
 
         // set up the RecyclerView
-        RecyclerView.LayoutManager lm = new LinearLayoutManager( this );
-        binding.list.setLayoutManager(lm);
+        CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
+        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+        binding.list.setLayoutManager(layoutManager);
         binding.list.setHasFixedSize(true);
+        binding.list.addOnScrollListener(new CenterScrollListener());
 
     }
 
