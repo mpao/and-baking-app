@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         }
         this.observeData(viewModel);
 
-        // set up the RecyclerView
-        CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
+        // set up the RecyclerView, CarouselLayoutManager has an infinite loop for the "roulette game"
+        CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.VERTICAL, true);
         layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
         binding.list.setLayoutManager(layoutManager);
         binding.list.setHasFixedSize(true);

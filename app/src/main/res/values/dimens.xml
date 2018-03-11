@@ -4,4 +4,6 @@
     <dimen name="small_spacing">8dp</dimen>
     <dimen name="big_spacing">32dp</dimen>
     <dimen name="huge_spacing">64dp</dimen>
+    <dimen name="main_row_size">250dp</dimen>
+    <dimen name="main_row_text">32sp</dimen>
 </resources>
