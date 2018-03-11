@@ -24,14 +24,9 @@
         </activity>
 
         <activity
-            android:name=".ui.RecipeActivity"
+            android:name=".ui.DetailActivity"
             android:theme="@style/AppTheme"
             android:parentActivityName=".ui.MainActivity"/>
-
-        <activity
-            android:name=".ui.StepActivity"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".ui.RecipeActivity"/>
 
     </application>
 

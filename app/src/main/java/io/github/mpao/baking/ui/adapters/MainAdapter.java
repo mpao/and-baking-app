@@ -10,14 +10,14 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import io.github.mpao.baking.databinding.MainRowBinding;
 import io.github.mpao.baking.entities.Recipe;
-import io.github.mpao.baking.ui.RecipeActivity;
+import io.github.mpao.baking.ui.DetailActivity;
 
-public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder>{
+public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
 
     private final List<Recipe> list;
     private Context context;
 
-    public RecipesAdapter(List<Recipe> list){
+    public MainAdapter(List<Recipe> list){
 
         this.list = list;
 
@@ -25,7 +25,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
     @Override
     @NonNull
-    public RecipesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from( context );
@@ -35,7 +35,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecipesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MainAdapter.ViewHolder holder, int position) {
 
         Recipe recipe = list.get(position);
         holder.bind( recipe );
@@ -66,7 +66,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             if( recipe.getImage() != null && recipe.getImage().length()>0 )
                 Picasso.with(context).load( recipe.getImage() ).into(bind.image);
             bind.row.setOnClickListener( view -> {
-                Intent intent = new Intent(context, RecipeActivity.class);
+                Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("value", recipe);
                 context.startActivity(intent);
             } );

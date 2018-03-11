@@ -9,7 +9,7 @@ import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
 import com.azoft.carousellayoutmanager.CenterScrollListener;
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.databinding.ActivityMainBinding;
-import io.github.mpao.baking.ui.adapters.RecipesAdapter;
+import io.github.mpao.baking.ui.adapters.MainAdapter;
 import io.github.mpao.baking.viewmodels.MainViewModel;
 
 /*
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private void observeData(MainViewModel viewModel){
 
         viewModel.getData().observe(this, list ->{
-            RecipesAdapter adapter = new RecipesAdapter( list );
+            MainAdapter adapter = new MainAdapter( list );
             binding.list.setAdapter(adapter);
         });
 

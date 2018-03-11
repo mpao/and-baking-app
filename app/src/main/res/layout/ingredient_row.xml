@@ -24,7 +24,7 @@
             android:contentDescription="@{ingredient.ingredient}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_bookmark"/>
+            />
 
         <TextView
             android:id="@+id/textView"

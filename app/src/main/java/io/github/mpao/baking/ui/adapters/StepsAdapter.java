@@ -1,15 +1,15 @@
 package io.github.mpao.baking.ui.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import java.util.List;
+
+import io.github.mpao.baking.R;
 import io.github.mpao.baking.databinding.StepRowBinding;
 import io.github.mpao.baking.entities.Step;
-import io.github.mpao.baking.ui.StepActivity;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
 
@@ -59,9 +59,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
         public void bind(final Step step){
             bind.setStep( step );
             bind.title.setOnClickListener( view -> {
-                Intent intent = new Intent(context, StepActivity.class);
-                intent.putExtra("value", step);
-                context.startActivity(intent);
+                //todo
             } );
             bind.executePendingBindings();
         }
