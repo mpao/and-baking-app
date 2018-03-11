@@ -8,6 +8,7 @@ import android.app.Application;
 public class App extends Application {
 
     public static Graph graph;
+    public static final String INTENT_NAME = "recipe";
 
     @Override
     public void onCreate(){

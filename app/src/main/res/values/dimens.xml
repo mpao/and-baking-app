@@ -6,4 +6,5 @@
     <dimen name="huge_spacing">64dp</dimen>
     <dimen name="main_row_size">250dp</dimen>
     <dimen name="main_row_text">32sp</dimen>
+    <dimen name="fragment_list_width">200dp</dimen>
 </resources>

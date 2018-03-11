@@ -25,8 +25,13 @@
 
         <activity
             android:name=".ui.DetailActivity"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".ui.MainActivity"/>
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".ui.StepActivity"
+            android:parentActivityName=".ui.DetailActivity"
+            android:theme="@style/AppTheme"/>
 
     </application>
 
