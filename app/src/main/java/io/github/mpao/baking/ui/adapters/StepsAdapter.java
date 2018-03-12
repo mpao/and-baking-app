@@ -4,17 +4,18 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import java.util.List;
 import io.github.mpao.baking.databinding.StepRowBinding;
-import io.github.mpao.baking.entities.Recipe;
+import io.github.mpao.baking.entities.Step;
 import io.github.mpao.baking.ui.FragmentConnector;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
 
-    private Recipe recipe;
+    private List<Step> list;
     private FragmentConnector connector;
 
-    public StepsAdapter(Recipe recipe, FragmentConnector connector){
-        this.recipe = recipe;
+    public StepsAdapter(List<Step> list, FragmentConnector connector){
+        this.list = list;
         this.connector = connector;
     }
 
@@ -31,13 +32,14 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull StepsAdapter.ViewHolder holder, int position) {
 
-        holder.bind( recipe, position );
+        Step step = list.get(position);
+        holder.bind( step );
 
     }
 
     @Override
     public int getItemCount() {
-        return recipe != null ? recipe.getSteps().size() :  0;
+        return list != null ? list.size() :  0;
     }
 
     /*
@@ -52,9 +54,14 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
             this.bind = binding;
         }
 
-        public void bind(Recipe recipe, int position){
-            bind.setStep( recipe.getSteps().get(position) );
-            bind.title.setOnClickListener( view -> connector.onElementSelected(recipe, position) );
+        public void bind(Step step){
+            bind.setStep(step);
+            /*
+             * Click on item:
+             * interface ( DetailActivity ) accomplishes the selection according to the layout;
+             * populate the fragments in tablet or start new activity
+             */
+            bind.title.setOnClickListener( view -> connector.onElementSelected(step) );
             bind.executePendingBindings();
         }
 

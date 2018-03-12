@@ -1,40 +1,47 @@
 package io.github.mpao.baking.ui;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import javax.inject.Inject;
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.di.App;
 import io.github.mpao.baking.entities.Recipe;
+import io.github.mpao.baking.entities.Step;
+import io.github.mpao.baking.models.database.AppDatabase;
 
+/*
+ * Show the information for a Recipe
+ */
 public class DetailActivity extends AppCompatActivity implements FragmentConnector{
 
-    @Nullable Recipe recipe;
-    int position;
+    DetailFragment list;
+    StepFragment detail;
+    @Inject AppDatabase database;
+    Recipe recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        App.graph.inject(this);
         setContentView(R.layout.activity_detail);
+        list   = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment);
+        detail = (StepFragment)getSupportFragmentManager().findFragmentById(R.id.step_fragment);
+        new AsyncTask<Void, Void, Void>() { //todo pass to MVVM
+            @Override
+            protected Void doInBackground(Void... voids) {
+                recipe = database.recipeDao().getRecipe(App.recipeId);
+                return null;
+            }
 
-    }
-
-    @Override
-    protected void onResume() {
-
-        super.onResume();
-        recipe   = this.getIntent().getParcelableExtra(App.INTENT_NAME);
-        position = this.getIntent().getIntExtra("position", 0);
-        if(recipe != null && position != 0){
-            /* this piece of code will be execute only in this case:
-             * let say that portrait mode has a single layout and landscape has the master-detail layout,
-             * if the app have the Detail activity in portrait mode with a recipe selected,
-             * when it's turned in landscape mode, app switches to two-pane-layout and the viewed
-             * recipe will be saved and passed to the detail fragment */
-            this.onElementSelected(recipe, position);
-        }
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                list.setUp(recipe.getSteps());
+            }
+        }.execute();
 
     }
 
@@ -43,23 +50,18 @@ public class DetailActivity extends AppCompatActivity implements FragmentConnect
      * the user tap on an element of the list
      * @see io.github.mpao.baking.ui.adapters.MainAdapter.ViewHolder#bind
      * https://developer.android.com/training/basics/fragments/communicating.html
-     * @param recipe shared element within fragments
-     * @param position position of the step
+     * @param step shared element within fragments
      */
     @Override
-    public void onElementSelected(Recipe recipe, int position) {
+    public void onElementSelected(Step step) {
 
-        // get the fragment detail if exists (tablet layout true, else false)
-        StepFragment fragment = (StepFragment)getSupportFragmentManager().findFragmentById(R.id.step_fragment);
-
-        if ( findViewById(R.id.step_fragment) != null && fragment != null) {
+        if ( findViewById(R.id.step_fragment) != null && detail != null) {
             // if app shows two panes layout, and fragment detail exists
-            fragment.setUpDetailElement(recipe, position);
+            detail.setUpDetailElement(step);
         }else{
             // phone layout; use another activity as detail view
             Intent intent = new Intent(this, StepActivity.class);
-            intent.putExtra(App.INTENT_NAME, recipe);
-            intent.putExtra("position", position);
+            intent.putExtra("tmp", step); // todo fixme
             this.startActivity(intent);
         }
 

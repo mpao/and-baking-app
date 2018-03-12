@@ -68,7 +68,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
                 Picasso.with(context).load( recipe.getImage() ).into(bind.image);
             bind.row.setOnClickListener( view -> {
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(App.INTENT_NAME, recipe);
+                // recipe has been chosen, change the application recipe ID
+                App.recipeId = recipe.getId();
                 context.startActivity(intent);
             } );
             bind.executePendingBindings();
