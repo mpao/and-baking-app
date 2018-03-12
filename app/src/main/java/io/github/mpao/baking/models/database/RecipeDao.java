@@ -9,8 +9,7 @@ import io.github.mpao.baking.entities.Recipe;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 /**
- * Room implementation for insert and select all the recipes. No need for
- * a single selection, neither the delete
+ * Room implementation for insert and select all the recipes.
  */
 @Dao
 public interface RecipeDao {
@@ -18,6 +17,10 @@ public interface RecipeDao {
     // keep in mind that the table name ( recipes ) is defined in Recipe.class
     @Query("SELECT * FROM recipes")
     LiveData<List<Recipe>> getAll();
+
+    // select single element by ID
+    @Query("select * from recipes where id = :id")
+    Recipe getRecipe(int id);
 
     // overwrite object by ID, if there will be an update in the json, i will save it
     @Insert(onConflict = REPLACE)

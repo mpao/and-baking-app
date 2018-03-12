@@ -1,45 +1,68 @@
 package io.github.mpao.baking.ui;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import javax.inject.Inject;
 import io.github.mpao.baking.R;
+import io.github.mpao.baking.di.App;
 import io.github.mpao.baking.entities.Recipe;
+import io.github.mpao.baking.entities.Step;
+import io.github.mpao.baking.models.database.AppDatabase;
 
 /*
- *
+ * Show the information for a Recipe
  */
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements FragmentConnector{
+
+    DetailFragment list;
+    StepFragment detail;
+    @Inject AppDatabase database;
+    Recipe recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        App.graph.inject(this);
         setContentView(R.layout.activity_detail);
+        list   = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment);
+        detail = (StepFragment)getSupportFragmentManager().findFragmentById(R.id.step_fragment);
+        new AsyncTask<Void, Void, Void>() { //todo pass to MVVM
+            @Override
+            protected Void doInBackground(Void... voids) {
+                recipe = database.recipeDao().getRecipe(App.recipeId);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                list.setUp(recipe.getSteps());
+            }
+        }.execute();
 
     }
 
-    /*
-     * if the app is put in the landscape mode during the choice of the recipe,
-     * or the user turns the device while DetailActivity is on screen
-     * the intent from main activity is still caught but, instead of DetailFragment, the
-     * responsability returns to MainActivity, and the DetailActivity is as if it had never existed
-     * (no history flag). MainActivity in landscape catch this new intent in onCreate and
-     * show the data in the two-panes layout
+    /**
+     * Interface method implementation for master-detail layout. It's executed when
+     * the user tap on an element of the list
+     * @see io.github.mpao.baking.ui.adapters.MainAdapter.ViewHolder#bind
+     * https://developer.android.com/training/basics/fragments/communicating.html
+     * @param step shared element within fragments
      */
     @Override
-    protected void onResume() {
+    public void onElementSelected(Step step) {
 
-        super.onResume();
-
-        @Nullable Recipe recipe = this.getIntent().getParcelableExtra("element");
-        if(findViewById(R.id.detail_w960_marker) != null) {
-            Intent intent = new Intent( this, MainActivity.class );
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            intent.putExtra("element", recipe);
-            this.startActivity(intent); //
-            this.finish();
+        if ( findViewById(R.id.step_fragment) != null && detail != null) {
+            // if app shows two panes layout, and fragment detail exists
+            detail.setUpDetailElement(step);
+        }else{
+            // phone layout; use another activity as detail view
+            Intent intent = new Intent(this, StepActivity.class);
+            intent.putExtra("tmp", step); // todo fixme
+            this.startActivity(intent);
         }
 
     }

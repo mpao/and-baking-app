@@ -1,55 +1,64 @@
 package io.github.mpao.baking.ui;
 
-import android.content.Intent;
-import android.support.annotation.Nullable;
+import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.azoft.carousellayoutmanager.CenterScrollListener;
 import io.github.mpao.baking.R;
-import io.github.mpao.baking.entities.Recipe;
+import io.github.mpao.baking.databinding.ActivityMainBinding;
+import io.github.mpao.baking.di.App;
+import io.github.mpao.baking.ui.adapters.MainAdapter;
+import io.github.mpao.baking.viewmodels.MainViewModel;
 
-public class MainActivity extends AppCompatActivity implements FragmentConnector {
+/*
+ * Proof of concept of CarouselLayoutManager. It's very nice, but
+ * not for this use case.
+ */
+public class MainActivity extends AppCompatActivity {
+
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         setTheme(R.style.AppTheme); // see splash_screen.xml
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        @Nullable Recipe recipe = this.getIntent().getParcelableExtra("element");
-        if(recipe != null){
-            /* this piece of code will be execute only in this case:
-             * let say that portrait mode has a single layout and landscape has the master-detail layout,
-             * if the app have the Detail activity in portrait mode with a recipe selected,
-             * when it's turned in landscape mode, app switches to two-pane-layout and the viewed
-             * recipe will be saved and passed to the detail fragment */
-            this.onElementSelected(recipe);
+        // get data from viewmodel
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        if( savedInstanceState == null) {
+            viewModel.init();
         }
+        this.observeData(viewModel);
+
+        // set up the RecyclerView, CarouselLayoutManager has an infinite loop for the "roulette game"
+        CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.VERTICAL, true);
+        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+        binding.list.setLayoutManager(layoutManager);
+        binding.list.setHasFixedSize(true);
+        binding.list.addOnScrollListener(new CenterScrollListener());
 
     }
 
-    /**
-     * Interface method implementation for master-detail layout. It's executed when
-     * the user tap on an element of the list
-     * @see io.github.mpao.baking.ui.adapters.ListAdapter.ViewHolder#bind
-     * https://developer.android.com/training/basics/fragments/communicating.html
-     * @param recipe shared element within fragments
-     */
     @Override
-    public void onElementSelected(Recipe recipe) {
+    protected void onResume() {
+        super.onResume();
+        App.recipeId = App.DEFAULT_ID; // reset ID
+    }
 
-        // get the fragment detail if exists ( tablet layout true, else false)
-        DetailFragment fragment = (DetailFragment)getSupportFragmentManager().findFragmentById(R.id.detail_fragment);
+    /*
+     * observe and update data from the model
+     */
+    private void observeData(MainViewModel viewModel){
 
-        if ( findViewById(R.id.detail_fragment) != null && fragment != null) {
-            // if app shows two panes layout, and fragment detail exists
-            fragment.setUpDetailElement(recipe);
-        }else{
-            // phone layout; use another activity as detail view
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("element", recipe);
-            this.startActivity(intent);
-        }
+        viewModel.getData().observe(this, list ->{
+            MainAdapter adapter = new MainAdapter( list );
+            binding.list.setAdapter(adapter);
+        });
 
     }
 

@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    this layout will never be show. It's used in the
-    DetailActivity onCreate method for understanding if
-    the device has to show the detail in a single layout or
-    in a master-detail flow
--->
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/detail_w960_marker"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent">
 
+    <fragment
+        android:id="@+id/list_fragment"
+        android:name="io.github.mpao.baking.ui.DetailFragment"
+        android:layout_width="@dimen/fragment_list_width"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_detail"/>
+
+    <fragment
+        android:id="@+id/step_fragment"
+        android:name="io.github.mpao.baking.ui.StepFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/list_fragment"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_step"/>
+
+</android.support.constraint.ConstraintLayout>
