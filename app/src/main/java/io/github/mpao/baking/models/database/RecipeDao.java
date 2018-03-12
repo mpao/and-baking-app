@@ -20,7 +20,7 @@ public interface RecipeDao {
 
     // select single element by ID
     @Query("select * from recipes where id = :id")
-    Recipe getRecipe(int id);
+    LiveData<Recipe> getRecipe(int id);
 
     // overwrite object by ID, if there will be an update in the json, i will save it
     @Insert(onConflict = REPLACE)

@@ -53,4 +53,14 @@ public class RecipeDataImpl implements RecipeData {
 
     }
 
+    /*
+     * Get a single Recipe from the database using the ID as key
+     */
+    @Override
+    public LiveData<Recipe> get(int id){
+
+        return database.recipeDao().getRecipe(id);
+
+    }
+
 }

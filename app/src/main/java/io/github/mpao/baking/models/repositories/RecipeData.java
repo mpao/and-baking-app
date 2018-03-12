@@ -11,5 +11,6 @@ import io.github.mpao.baking.entities.Recipe;
 public interface RecipeData {
 
     LiveData<List<Recipe>> get();
+    LiveData<Recipe> get(int id);
 
 }

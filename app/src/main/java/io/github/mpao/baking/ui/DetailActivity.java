@@ -1,15 +1,15 @@
 package io.github.mpao.baking.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import javax.inject.Inject;
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.di.App;
-import io.github.mpao.baking.entities.Recipe;
 import io.github.mpao.baking.entities.Step;
 import io.github.mpao.baking.models.database.AppDatabase;
+import io.github.mpao.baking.viewmodels.DetailViewModel;
 
 /*
  * Show the information for a Recipe
@@ -19,7 +19,6 @@ public class DetailActivity extends AppCompatActivity implements FragmentConnect
     DetailFragment list;
     StepFragment detail;
     @Inject AppDatabase database;
-    Recipe recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,19 +28,14 @@ public class DetailActivity extends AppCompatActivity implements FragmentConnect
         setContentView(R.layout.activity_detail);
         list   = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment);
         detail = (StepFragment)getSupportFragmentManager().findFragmentById(R.id.step_fragment);
-        new AsyncTask<Void, Void, Void>() { //todo pass to MVVM
-            @Override
-            protected Void doInBackground(Void... voids) {
-                recipe = database.recipeDao().getRecipe(App.recipeId);
-                return null;
-            }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
+        // get data from viewmodel
+        DetailViewModel viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
+        viewModel.get(App.recipeId).observe(this, recipe ->{
+            if(recipe != null) {
                 list.setUp(recipe.getSteps());
             }
-        }.execute();
+        });
 
     }
 
