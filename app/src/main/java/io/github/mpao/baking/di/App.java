@@ -4,16 +4,16 @@ import android.app.Application;
 
 /**
  * Application class for creating the dagger graph
- * App class contain also a reference to an ID if a recipe
- * is selected. This is usefull for the navigation between
- * activities and fragments, getting the recipe informations
- * from the database with the ID.
+ * App class contain also a constant value for define
+ * a *not selected value*, and some string for labeling
+ * intent.
  */
 public class App extends Application {
 
     public static Graph graph;
-    public static int recipeId;
-    public static final int DEFAULT_ID = -1;
+    public static final int INVALID         = -1;
+    public static final String RECIPE_VALUE = "recipe";
+    public static final String STEP_INDEX   = "index";
 
     @Override
     public void onCreate(){

@@ -9,7 +9,6 @@ import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
 import com.azoft.carousellayoutmanager.CenterScrollListener;
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.databinding.ActivityMainBinding;
-import io.github.mpao.baking.di.App;
 import io.github.mpao.baking.ui.adapters.MainAdapter;
 import io.github.mpao.baking.viewmodels.MainViewModel;
 
@@ -42,12 +41,6 @@ public class MainActivity extends AppCompatActivity {
         binding.list.setHasFixedSize(true);
         binding.list.addOnScrollListener(new CenterScrollListener());
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        App.recipeId = App.DEFAULT_ID; // reset ID
     }
 
     /*
