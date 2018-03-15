@@ -1,6 +1,6 @@
 package io.github.mpao.baking.ui;
 
-import io.github.mpao.baking.entities.Step;
+import io.github.mpao.baking.entities.Recipe;
 
 /**
  * Interface for fragments communication
@@ -8,6 +8,6 @@ import io.github.mpao.baking.entities.Step;
  */
 public interface FragmentConnector {
 
-    void onElementSelected(Step step);
+    void onElementSelected(Recipe recipe, int position);
 
 }

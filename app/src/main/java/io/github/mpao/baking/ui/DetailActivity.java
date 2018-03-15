@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.di.App;
-import io.github.mpao.baking.entities.Step;
+import io.github.mpao.baking.entities.Recipe;
 import io.github.mpao.baking.viewmodels.DetailViewModel;
 
 /*
@@ -39,10 +39,14 @@ public class DetailActivity extends AppCompatActivity implements FragmentConnect
         super.onResume();
         // get data from viewmodel
         DetailViewModel viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
+        int position = getIntent().getIntExtra(App.STEP_INDEX,App.INVALID);
         if(id != App.INVALID ){
             viewModel.get(id).observe(this, recipe ->{
                 if(recipe != null) {
-                    list.setUp(recipe.getSteps());
+                    list.setUp(recipe);
+                    if(position != App.INVALID){
+                        onElementSelected(recipe, position);
+                    }
                 }
             });
         }
@@ -68,18 +72,20 @@ public class DetailActivity extends AppCompatActivity implements FragmentConnect
      * the user tap on an element of the list
      * @see io.github.mpao.baking.ui.adapters.MainAdapter.ViewHolder#bind
      * https://developer.android.com/training/basics/fragments/communicating.html
-     * @param step shared element within fragments
+     * @param recipe shared element within fragments
+     * @param position step index
      */
     @Override
-    public void onElementSelected(Step step) {
+    public void onElementSelected(Recipe recipe, int position) {
 
         if ( findViewById(R.id.step_fragment) != null && detail != null) {
             // if app shows two panes layout, and fragment detail exists
-            detail.setUpDetailElement(step);
+            detail.setUpDetailElement(recipe, position);
         }else{
             // phone layout; use another activity as detail view
             Intent intent = new Intent(this, StepActivity.class);
-            intent.putExtra(App.STEP_INDEX, step);
+            intent.putExtra(App.RECIPE_VALUE, recipe.getId());
+            intent.putExtra(App.STEP_INDEX, position);
             this.startActivity(intent);
         }
 
