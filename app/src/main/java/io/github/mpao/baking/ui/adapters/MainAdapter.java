@@ -11,7 +11,7 @@ import java.util.List;
 import io.github.mpao.baking.databinding.MainRowBinding;
 import io.github.mpao.baking.di.App;
 import io.github.mpao.baking.entities.Recipe;
-import io.github.mpao.baking.ui.DetailActivity;
+import io.github.mpao.baking.ui.RecipeActivity;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
 
@@ -67,8 +67,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
             if( recipe.getImage() != null && recipe.getImage().length()>0 )
                 Picasso.with(context).load( recipe.getImage() ).into(bind.image);
             bind.row.setOnClickListener( view -> {
-                Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(App.RECIPE_VALUE, recipe.getId());
+                Intent intent = new Intent(context, RecipeActivity.class);
+                intent.putExtra(App.RECIPE_VALUE, recipe);
                 context.startActivity(intent);
             } );
             bind.executePendingBindings();

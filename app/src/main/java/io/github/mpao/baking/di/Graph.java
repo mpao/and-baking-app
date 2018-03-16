@@ -3,8 +3,6 @@ package io.github.mpao.baking.di;
 import javax.inject.Singleton;
 import dagger.Component;
 import io.github.mpao.baking.models.repositories.RecipeDataImpl;
-import io.github.mpao.baking.ui.DetailActivity;
-import io.github.mpao.baking.viewmodels.DetailViewModel;
 import io.github.mpao.baking.viewmodels.MainViewModel;
 
 /**
@@ -21,7 +19,5 @@ public interface Graph {
 
     void inject(RecipeDataImpl recipeData);
     void inject(MainViewModel listViewModel);
-    void inject(DetailActivity detailActivity);
-    void inject(DetailViewModel detailViewModel);
 
 }

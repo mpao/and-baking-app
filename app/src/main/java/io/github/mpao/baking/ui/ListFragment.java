@@ -11,22 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import io.github.mpao.baking.R;
-import io.github.mpao.baking.databinding.FragmentDetailBinding;
+import io.github.mpao.baking.databinding.FragmentListBinding;
+import io.github.mpao.baking.di.App;
 import io.github.mpao.baking.entities.Recipe;
 import io.github.mpao.baking.ui.adapters.StepsAdapter;
 
-/*
- * Fragment for listing the step of a recipe preparation
- */
-public class DetailFragment extends Fragment {
+public class ListFragment extends Fragment {
 
-    private FragmentDetailBinding binding;
+    private FragmentListBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false);
+        Recipe recipe = getActivity().getIntent().getParcelableExtra(App.RECIPE_VALUE);
+
+        this.setUp(recipe);
         return binding.getRoot();
 
     }
@@ -43,18 +44,6 @@ public class DetailFragment extends Fragment {
         binding.list.setHasFixedSize(true);
         StepsAdapter adapter = new StepsAdapter(recipe, (FragmentConnector) getActivity());
         binding.list.setAdapter(adapter);
-
-    }
-
-    /*
-     * retain this fragment when activity is re-initialized
-     * otherwise binding field and recipe shall be null
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
 
     }
 
