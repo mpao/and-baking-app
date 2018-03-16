@@ -71,9 +71,19 @@ public class RecipeActivity extends AppCompatActivity implements FragmentConnect
         }else{
             // phone layout; use another activity as detail view
             Intent intent = new Intent(this, StepActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(App.RECIPE_VALUE, recipe);
             intent.putExtra(App.STEP_INDEX, position);
             this.startActivity(intent);
+            /*
+            Why FLAG_ACTIVITY_CLEAR_TOP ?
+            Without this flag, if i rotate the devide more and more time, just for fun,
+            many StepActivity will be created on the top of the stack. From official doc:
+            If set, and the activity being launched is already running in the current task,
+            then instead of launching a new instance of that activity,
+            all of the other activities on top of it will be closed and this Intent will be
+            delivered to the (now on top) old activity as a new Intent.
+             */
         }
 
     }
