@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    this layout will never be show. It's used in the
+    StepActivity onResume method for understanding if
+    the device has to show the detail in a single layout or
+    in a master-detail flow
+-->
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/step_width_marker"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>

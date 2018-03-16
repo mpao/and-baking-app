@@ -36,10 +36,18 @@ public class ContentFragment extends Fragment {
 
         binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_content, container, false);
         Recipe recipe = (Recipe)getArguments().getParcelable(App.RECIPE_VALUE);
-        step = recipe.getSteps().get(getArguments().getInt(App.STEP_INDEX));
+        step = savedInstanceState == null ?
+                recipe.getSteps().get(getArguments().getInt(App.STEP_INDEX)):
+                savedInstanceState.getParcelable(App.RECIPE_VALUE);
         binding.setStep(step);
         return binding.getRoot();
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(App.RECIPE_VALUE, step);
     }
 
 }
