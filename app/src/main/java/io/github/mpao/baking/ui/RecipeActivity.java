@@ -101,17 +101,4 @@ public class RecipeActivity extends AppCompatActivity implements FragmentConnect
 
     }
 
-    /*
-     * on back pressed, restart all the app activity stack.
-     * this resolve the problem introduced by singleTop launch mode
-     * that risolve the upbutton stack navigation
-     */
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
-    }
-
 }
