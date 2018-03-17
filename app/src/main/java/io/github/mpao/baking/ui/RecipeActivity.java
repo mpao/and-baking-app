@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.di.App;
@@ -99,6 +100,14 @@ public class RecipeActivity extends AppCompatActivity implements FragmentConnect
         outState.putInt(App.STEP_INDEX, position);
         outState.putBoolean(TAG, hasItemSelected);
 
+    }
+
+    /*
+     * on back pressed, simulate up button
+     */
+    @Override
+    public void onBackPressed() {
+        NavUtils.navigateUpFromSameTask(this);
     }
 
 }

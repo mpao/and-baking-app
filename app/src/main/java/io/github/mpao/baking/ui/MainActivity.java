@@ -44,10 +44,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*
-     * observe and update data from the model
+     * observe and update data from the model. on savedInstance not null,
+     * reinitialize the data for the viewModel
      */
     private void observeData(MainViewModel viewModel){
 
+        if(viewModel.getData()==null){
+            viewModel.init();
+        }
         viewModel.getData().observe(this, list ->{
             MainAdapter adapter = new MainAdapter( list );
             binding.list.setAdapter(adapter);
