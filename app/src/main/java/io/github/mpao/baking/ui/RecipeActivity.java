@@ -3,9 +3,6 @@ package io.github.mpao.baking.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.di.App;
@@ -13,36 +10,34 @@ import io.github.mpao.baking.entities.Recipe;
 
 public class RecipeActivity extends AppCompatActivity implements FragmentConnector{
 
+    private final String STATE = "hasItemSelected";
+    private boolean hasItemSelected = false;
+    private ContentFragment fragment;
     private Recipe recipe;
     private int position;
-    private boolean hasItemSelected = false;
-    private static final String TAG = "save";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        fragment = (ContentFragment)getSupportFragmentManager().findFragmentById(R.id.step_fragment);
 
-        /*
-         * if there was a selection in landscape mode, get the information
-         * about it, and launch an intent to the StepActivity ( onElementSelected
-         * in portrait modo )
-         */
-        if(savedInstanceState != null ){
-            if(savedInstanceState.getBoolean(TAG)) {
-                this.onElementSelected(
-                        savedInstanceState.getParcelable(App.RECIPE_VALUE),
-                        savedInstanceState.getInt(App.STEP_INDEX));
-            }
+        // User selected an item from the list in _landscape_ mode, but now the device
+        // is recreating the activity in portrait mode
+        if(savedInstanceState != null && savedInstanceState.getBoolean(STATE) && fragment == null){
+            this.onElementSelected(
+                    savedInstanceState.getParcelable(App.RECIPE_VALUE),
+                    savedInstanceState.getInt(App.STEP_INDEX)
+            );
         }
-        /*
-         * From a portrait StepActivity to a landscape RecipeActivity
-         */
-        if(getIntent() != null && getIntent().getBooleanExtra("FromStep", false)) {
-            Recipe recipe = getIntent().getParcelableExtra(App.RECIPE_VALUE);
-            int position = getIntent().getIntExtra(App.STEP_INDEX, App.INVALID);
-            getIntent().putExtra("FromStep", false); // override the value if exists
-            this.onElementSelected(recipe, position);
+
+        // User selected an item from the list in _portrait_ mode, but not whe device
+        // is recreating the activity in landscape mode
+        if(savedInstanceState != null && fragment != null){
+            this.onElementSelected(
+                    savedInstanceState.getParcelable(App.RECIPE_VALUE),
+                    savedInstanceState.getInt(App.STEP_INDEX)
+            );
         }
 
     }
@@ -58,56 +53,34 @@ public class RecipeActivity extends AppCompatActivity implements FragmentConnect
     @Override
     public void onElementSelected(Recipe recipe, int position) {
 
-        if (findViewById(R.id.step_container) != null) {
+        // save information for selection
+        this.recipe   = recipe;
+        this.position = position;
+
+        if (fragment != null && fragment.isInLayout()) {
             // if app shows two panes layout and I clicked on a list item
-            // save the information about the selection, and open the
-            // detail in the other fragment
-            this.recipe = recipe;
-            this.position = position;
-            this.hasItemSelected = true;
-            Fragment content = ContentFragment.newInstance(recipe, position);
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.step_container, content);
-            ft.commit();
+            // open the detail in the other fragment
+            fragment.update(recipe, position);
+            hasItemSelected = true;
         }else{
             // phone layout; use another activity as detail view
             Intent intent = new Intent(this, StepActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(App.RECIPE_VALUE, recipe);
             intent.putExtra(App.STEP_INDEX, position);
             this.startActivity(intent);
-            /*
-            Why FLAG_ACTIVITY_CLEAR_TOP ?
-            Without this flag, if i rotate the devide more and more time, just for fun,
-            many StepActivity will be created on the top of the stack. From official doc:
-            If set, and the activity being launched is already running in the current task,
-            then instead of launching a new instance of that activity,
-            all of the other activities on top of it will be closed and this Intent will be
-            delivered to the (now on top) old activity as a new Intent.
-             */
         }
 
     }
 
     /*
-     * save information about the item selection
+     * Save activity state
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-
         super.onSaveInstanceState(outState);
-        outState.putParcelable(App.RECIPE_VALUE, recipe);
-        outState.putInt(App.STEP_INDEX, position);
-        outState.putBoolean(TAG, hasItemSelected);
-
-    }
-
-    /*
-     * on back pressed, simulate up button
-     */
-    @Override
-    public void onBackPressed() {
-        NavUtils.navigateUpFromSameTask(this);
+        outState.putBoolean(STATE, hasItemSelected);        // user has choose an item
+        outState.putParcelable(App.RECIPE_VALUE, recipe);   // the value of recipe
+        outState.putInt(App.STEP_INDEX, position);          // the item choosen by the user
     }
 
 }

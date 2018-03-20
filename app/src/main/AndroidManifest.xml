@@ -23,14 +23,8 @@
             </intent-filter>
         </activity>
 
-        <!-- launchMode singleTop: properly manage upnavigation from a StepActivity
-        to the DetailActivity, and the data will not be lost
-        if there is already an Activity instance with the same type at the top of stack in the caller Task,
-        there would not be any new Activity created, instead an Intent will be sent
-        to an existed Activity instance through onNewIntent() method-->
         <activity
             android:name=".ui.RecipeActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme"/>
 

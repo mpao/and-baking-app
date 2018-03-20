@@ -16,8 +16,9 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout="@layout/fragment_list"/>
 
-    <FrameLayout
-        android:id="@+id/step_container"
+    <fragment
+        android:id="@+id/step_fragment"
+        android:name="io.github.mpao.baking.ui.ContentFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
