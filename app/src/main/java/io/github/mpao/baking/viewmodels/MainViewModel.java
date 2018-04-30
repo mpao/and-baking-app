@@ -29,5 +29,10 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    public LiveData<Recipe> get(int id){
+
+        return repo.get(id);
+
+    }
 
 }

@@ -33,7 +33,7 @@
             android:parentActivityName=".ui.RecipeActivity"
             android:theme="@style/AppTheme"/>
 
-        <activity android:name=".ui.widgets.RecipeConfig">
+        <activity android:name=".ui.widgets.WidgetConfigActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
@@ -45,6 +45,11 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/recipe_widget" />
         </receiver>
+
+        <service
+            android:name=".ui.widgets.WidgetService"
+            android:exported="false">
+        </service>
 
     </application>
 

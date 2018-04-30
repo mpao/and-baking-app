@@ -4,4 +4,7 @@
     <string name="quantity">Quantity: %1$d %2$s</string>
     <string name="tab_text_1">Description</string>
     <string name="tab_text_2">Steps</string>
+    <!-- widget stuff -->
+    <string name="config_title">Choose your recipe!</string>
+    <string name="widgets">widgets</string>
 </resources>

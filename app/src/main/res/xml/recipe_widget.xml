@@ -6,7 +6,7 @@
     android:updatePeriodMillis="86400000"
     android:previewImage="@mipmap/cupcake"
     android:initialLayout="@layout/recipe_widget"
-    android:configure="io.github.mpao.baking.ui.widgets.RecipeConfig"
+    android:configure="io.github.mpao.baking.ui.widgets.WidgetConfigActivity"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen">
 </appwidget-provider>
