@@ -7,6 +7,9 @@ import io.github.mpao.baking.di.App;
 import io.github.mpao.baking.models.database.AppDatabase;
 import io.github.mpao.baking.viewmodels.MainViewModel;
 
+/**
+ * Get the recipe from room database. The broadcast receiver for the service is the widget provider
+ */
 public class WidgetService extends LifecycleService {
 
     @Inject AppDatabase database;
@@ -19,18 +22,22 @@ public class WidgetService extends LifecycleService {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        int id = intent.getIntExtra("id", DEFAULT_VALUE);
+    public void onStart(Intent intent, int startId) {
+
+        super.onStart(intent, startId);
+        int id     = intent.getIntExtra("id", DEFAULT_VALUE);
+        int widget = intent.getIntExtra("widget", DEFAULT_VALUE);
         if(id != DEFAULT_VALUE) {
             MainViewModel viewModel = new MainViewModel();
             viewModel.init();
             viewModel.get(id).observe(this, recipe -> {
-                Intent local = new Intent("io.github.mpao.baking.ui.widgets");
+                Intent local = new Intent("android.appwidget.action.APPWIDGET_UPDATE");
                 local.putExtra("recipe", recipe);
+                local.putExtra("widget", widget);
                 this.sendBroadcast(local);
             });
         }
-        return super.onStartCommand(intent, flags, startId);
+
     }
 
 }

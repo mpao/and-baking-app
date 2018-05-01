@@ -9,8 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RemoteViews;
-
 import io.github.mpao.baking.R;
 import io.github.mpao.baking.viewmodels.MainViewModel;
 
@@ -71,10 +69,8 @@ public class WidgetConfigActivity extends AppCompatActivity {
                                 SharedPreferences widgets = getSharedPreferences(getString(R.string.widgets), MODE_PRIVATE);
                                 widgets.edit().putInt(String.valueOf(widgetId), list.get(i).getId()).apply();
                                 // launch the widget
-                                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
                                 BakingWidgetProvider provider = new BakingWidgetProvider();
-                                RemoteViews views = provider.setUp(this, widgetId);
-                                appWidgetManager.updateAppWidget(widgetId, views);
+                                provider.setUp(this, widgetId);
                                 Intent resultValue = new Intent();
                                 resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
                                 setResult(RESULT_OK, resultValue);
