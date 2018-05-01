@@ -2,7 +2,6 @@ package io.github.mpao.baking.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import io.github.mpao.baking.R;
 
@@ -22,14 +21,14 @@ public class StepActivity extends AppCompatActivity {
 
     }
 
-    /*
-     * save the fragment state
+    /**
+     * Up navigation: behavior is the same of the back navigation
+     * @return boolean
      */
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.step_fragment);
-//        getSupportFragmentManager().putFragment(outState, "test", fragment );
-//    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        super.onBackPressed();
+        return true;
+    }
 
 }
