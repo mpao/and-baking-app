@@ -154,8 +154,10 @@ public class ContentFragment extends Fragment {
      */
     private void releaseVideoPlayer(){
 
-        player.stop();
-        player.release();
+        if(player != null) {
+            player.stop();
+            player.release();
+        }
         player = null;
 
     }
