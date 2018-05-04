@@ -1,9 +1,13 @@
 package io.github.mpao.baking.ui.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import com.squareup.picasso.Picasso;
+
 import io.github.mpao.baking.databinding.StepRowBinding;
 import io.github.mpao.baking.entities.Recipe;
 import io.github.mpao.baking.entities.Step;
@@ -13,6 +17,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
 
     private Recipe recipe;
     private FragmentConnector connector;
+    private Context context;
 
     public StepsAdapter(Recipe recipe, FragmentConnector connector){
         this.recipe = recipe;
@@ -23,6 +28,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
     @NonNull
     public StepsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+        context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from( parent.getContext() );
         StepRowBinding bind = StepRowBinding.inflate( layoutInflater, parent, false);
         return new ViewHolder( bind );
@@ -56,6 +62,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
         public void bind(Recipe recipe, int position){
             Step step = recipe.getSteps().get(position);
             bind.setStep(step);
+            if( step.getThumbnailURL() != null && step.getThumbnailURL().length()>0 )
+                Picasso.with(context).load( step.getThumbnailURL() ).into(bind.thumbnail);
             /*
              * Click on item:
              * interface ( DetailActivity ) accomplishes the selection according to the layout;
