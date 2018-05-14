@@ -147,6 +147,8 @@ public class ContentFragment extends Fragment {
         player.prepare(mediaSource);
         player.setPlayWhenReady(true); //todo network error
 
+        //todo gestire pausa e stop e ripresa in rotazione e background
+        //todo navigazione step avanti e indietro
     }
 
     /*
