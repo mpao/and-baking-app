@@ -7,4 +7,6 @@
     <dimen name="main_row_size">250dp</dimen>
     <dimen name="main_row_text">32sp</dimen>
     <dimen name="fragment_list_width">200dp</dimen>
+    <dimen name="nav_button_w">100dp</dimen>
+    <dimen name="nav_button_h">50dp</dimen>
 </resources>

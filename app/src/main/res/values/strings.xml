@@ -5,6 +5,8 @@
     <string name="tab_text_1">Description</string>
     <string name="tab_text_2">Steps</string>
     <string name="thumbnail">Thumbnail image</string>
+    <string name="next_button">next</string>
+    <string name="previous_button">previous</string>
     <!-- widget stuff -->
     <string name="config_title">Choose your recipe!</string>
     <string name="widgets">widgets</string>

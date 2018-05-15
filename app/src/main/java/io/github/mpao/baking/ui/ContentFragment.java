@@ -34,7 +34,7 @@ public class ContentFragment extends Fragment {
     private FragmentContentBinding binding;
     private Activity activity;
     private Recipe recipe;
-    private int position;
+    protected int position;
     private SimpleExoPlayer player;
     private SharedPreferences save;
     public static final String VIDEO_POS = "video_position";
@@ -59,7 +59,7 @@ public class ContentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_content, container, false);
-        save = App.save; //activity.getSharedPreferences("save", Context.MODE_PRIVATE);
+        save = App.save;
         // fragment created in portrait mode
         Intent intent = activity.getIntent();
         if( intent != null ){
@@ -68,7 +68,26 @@ public class ContentFragment extends Fragment {
             update(recipe, position);
         }
 
+        // set up nav button only for portrait mode
+        try {
+            binding.next.setOnClickListener(view -> navButtonClick(1));
+            binding.prev.setOnClickListener(view -> navButtonClick(-1));
+        }catch (NullPointerException e){
+            // layout w720dp without nav buttons
+            // do nothing
+        }
+
         return binding.getRoot();
+
+    }
+
+    /*
+     * Move between the step of the recipe w/ the nav button
+     */
+    private void navButtonClick(int shift){
+
+        App.save.edit().clear().apply();
+        update(recipe, position + shift); //todo see RecipeActivity.onElementSelected
 
     }
 
@@ -134,6 +153,18 @@ public class ContentFragment extends Fragment {
             setUpVideoPlayer(step);
 
             binding.setStep(step);
+
+            // set the button visibility
+            try{
+                int nextState = position == recipe.getSteps().size()-1 ? View.INVISIBLE : View.VISIBLE;
+                int prevState = position == 0 ? View.INVISIBLE : View.VISIBLE;
+                binding.next.setVisibility(nextState);
+                binding.prev.setVisibility(prevState);
+            }catch (NullPointerException e){
+                // layout w720dp without nav buttons
+                // do nothing
+            }
+
         }
 
     }
@@ -162,7 +193,6 @@ public class ContentFragment extends Fragment {
         player.prepare(mediaSource);
         player.setPlayWhenReady(true);
 
-        //todo navigazione step avanti e indietro
     }
 
     /*
