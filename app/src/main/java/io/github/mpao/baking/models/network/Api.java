@@ -9,7 +9,7 @@ import retrofit2.http.GET;
  */
 public interface Api {
 
-    @GET("/mocks/baking_mock.json") //todo attention wrong json !
+    @GET("/topher/2017/May/59121517_baking/baking.json")
     Call<Recipe[]> get();
 
 }

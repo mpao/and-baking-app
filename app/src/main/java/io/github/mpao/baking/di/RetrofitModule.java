@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class RetrofitModule {
 
-    private static final String API_URL = "https://mpao.github.io"; //todo attention wrong json !
+    private static final String API_URL = "https://d17h27t6h515a5.cloudfront.net/";
 
     /*
      * This method provides the Api for network request with a Retrofit object that has
