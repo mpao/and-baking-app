@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import com.squareup.picasso.Picasso;
 
 import io.github.mpao.baking.databinding.StepRowBinding;
+import io.github.mpao.baking.di.App;
 import io.github.mpao.baking.entities.Recipe;
 import io.github.mpao.baking.entities.Step;
+import io.github.mpao.baking.ui.ContentFragment;
 import io.github.mpao.baking.ui.FragmentConnector;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
@@ -69,7 +71,11 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
              * interface ( DetailActivity ) accomplishes the selection according to the layout;
              * populate the fragments in tablet or start new activity
              */
-            bind.title.setOnClickListener( view -> connector.onElementSelected(recipe, position) );
+            bind.title.setOnClickListener( view -> {
+                // delete any saves before proceeding, see ContentFragment.onSaveInstanceState(...)
+                App.save.edit().remove(ContentFragment.VIDEO_POS).apply();
+                connector.onElementSelected(recipe, position);
+            });
             bind.executePendingBindings();
         }
 

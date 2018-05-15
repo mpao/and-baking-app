@@ -3,6 +3,7 @@ package io.github.mpao.baking.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +36,8 @@ public class ContentFragment extends Fragment {
     private Recipe recipe;
     private int position;
     private SimpleExoPlayer player;
+    private SharedPreferences save;
+    public static final String VIDEO_POS = "video_position";
 
     /*
      * check the @Nullable value returned by getActivity()
@@ -56,6 +59,7 @@ public class ContentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_content, container, false);
+        save = App.save; //activity.getSharedPreferences("save", Context.MODE_PRIVATE);
         // fragment created in portrait mode
         Intent intent = activity.getIntent();
         if( intent != null ){
@@ -85,9 +89,9 @@ public class ContentFragment extends Fragment {
      * Release the player
      */
     @Override
-    public void onStop() {
+    public void onDestroy() {
 
-        super.onStop();
+        super.onDestroy();
         releaseVideoPlayer();
 
     }
@@ -106,6 +110,15 @@ public class ContentFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putParcelable(App.RECIPE_VALUE, recipe);
         outState.putInt(App.STEP_INDEX, position);
+        // IMPORTANT NOTE:
+        // why dont i use the bundles for saving the video position ?
+        // well, because the application use both bundle and intent for
+        // saving the fragment state depending on the device orientation
+        // I DONT want that any other classes ( ie RecipeActivity ) know about
+        // the player and is state, and the only way is to use a shared pref for
+        // the intent case. At this point, I used this shared pref for all the cases,
+        // since there is this opportunity, and cost 3 lines of code
+        save.edit().putLong(VIDEO_POS, player.getCurrentPosition()).apply();
 
     }
 
@@ -144,10 +157,11 @@ public class ContentFragment extends Fragment {
                 null,
                 null
         );
+        long pos = save.getLong(VIDEO_POS, 0);
+        player.seekTo(pos);
         player.prepare(mediaSource);
-        player.setPlayWhenReady(true); //todo network error
+        player.setPlayWhenReady(true);
 
-        //todo gestire pausa e stop e ripresa in rotazione e background
         //todo navigazione step avanti e indietro
     }
 
