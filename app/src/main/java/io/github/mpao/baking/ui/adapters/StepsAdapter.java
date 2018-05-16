@@ -73,7 +73,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder>{
              */
             bind.title.setOnClickListener( view -> {
                 // delete any saves before proceeding, see ContentFragment.onSaveInstanceState(...)
-                App.save.edit().remove(ContentFragment.VIDEO_POS).apply();
+                App.save.edit().clear().apply();
                 connector.onElementSelected(recipe, position);
             });
             bind.executePendingBindings();

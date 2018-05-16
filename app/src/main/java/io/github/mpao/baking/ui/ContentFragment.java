@@ -14,13 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import io.github.mpao.baking.R;
@@ -38,6 +43,7 @@ public class ContentFragment extends Fragment {
     private SimpleExoPlayer player;
     private SharedPreferences save;
     public static final String VIDEO_POS = "video_position";
+    public static final String VIDEO_STATE = "video_state"; // play/pause state
 
     /*
      * check the @Nullable value returned by getActivity()
@@ -104,13 +110,22 @@ public class ContentFragment extends Fragment {
 
     }
 
+   /*
+    * Restart player
+    */
+    @Override
+    public void onResume() {
+        super.onResume();
+        update(recipe, position);
+    }
+
     /*
      * Release the player
      */
     @Override
-    public void onDestroy() {
+    public void onStop() {
 
-        super.onDestroy();
+        super.onStop();
         releaseVideoPlayer();
 
     }
@@ -130,7 +145,7 @@ public class ContentFragment extends Fragment {
         outState.putParcelable(App.RECIPE_VALUE, recipe);
         outState.putInt(App.STEP_INDEX, position);
         // IMPORTANT NOTE:
-        // why dont i use the bundles for saving the video position ?
+        // why dont i use the bundles for saving the video position and state ?
         // well, because the application use both bundle and intent for
         // saving the fragment state depending on the device orientation
         // I DONT want that any other classes ( ie RecipeActivity ) know about
@@ -138,6 +153,7 @@ public class ContentFragment extends Fragment {
         // the intent case. At this point, I used this shared pref for all the cases,
         // since there is this opportunity, and cost 3 lines of code
         save.edit().putLong(VIDEO_POS, player.getCurrentPosition()).apply();
+        save.edit().putBoolean(VIDEO_STATE, player.getPlayWhenReady()).apply();
 
     }
 
@@ -189,9 +205,28 @@ public class ContentFragment extends Fragment {
                 null
         );
         long pos = save.getLong(VIDEO_POS, 0);
+        boolean state = save.getBoolean(VIDEO_STATE, true);
         player.seekTo(pos);
         player.prepare(mediaSource);
-        player.setPlayWhenReady(true);
+        player.setPlayWhenReady(state);
+        // manage play/pause button
+        player.addListener(new ExoPlayer.EventListener() {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest) {}
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) { }
+            @Override
+            public void onLoadingChanged(boolean isLoading) { }
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                // see note in onSaveInstanceState method
+                save.edit().putBoolean(VIDEO_STATE, playWhenReady).apply();
+            }
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {}
+            @Override
+            public void onPositionDiscontinuity() {}
+        });
 
     }
 
